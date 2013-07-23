@@ -1,0 +1,38 @@
+TIDAL Enterprise Scheduler: version 5.3.1.350
+Java version: 1.6.0_13
+Java Virtual Machine version: 11.3-b02
+Start Time : 07/01/13 16:06:47:267
+----------------------------------------------------------------------------
+Database URL :jdbc:sqlserver://cdac1sqltdl01:1433;selectMethod=cursor;databaseName=Admiral
+Database Driver :com.microsoft.sqlserver.jdbc.SQLServerDriver
+Maximum number of log files = 20000
+Added a LogFile called 'RegularFile'
+LogManager: setting default log
+Retrieved a LogFile called 'RegularFile'
+[Fatal Error] :1:15: The value following "version" in the XML declaration must be a quoted string.
+Retrieved a LogFile called 'RegularFile'
+Retrieved a LogFile called 'RegularFile'
+We are not running in a distributed master node.
+ServiceInstaller: no packages to install [D:\Program Files\Tidal\TIDAL\Scheduler\master\config].
+trying to deploy pkg D:\Program Files\Tidal\TIDAL\Scheduler\master\services\sapservice.pkg with guid id {51C57049-3215-44b7-ABE1-C012FF786010}
+pkgName sapservice.pkg existed.
+trying to deploy pkg D:\Program Files\Tidal\TIDAL\Scheduler\master\services\emailservice.pkg with guid id {65C600D1-4316-41bd-8ED0-AB8E5F470838}
+pkgName emailservice.pkg existed.
+trying to deploy pkg D:\Program Files\Tidal\TIDAL\Scheduler\master\services\oracledbservice.pkg with guid id {3EC69AA3-C8C3-4a19-8F66-F36CFDDA5BB1}
+pkgName oracledbservice.pkg existed.
+trying to deploy pkg D:\Program Files\Tidal\TIDAL\Scheduler\master\services\psservice.pkg with guid id {B20EC120-2EB5-4d5f-8133-73FA37225667}
+pkgName psservice.pkg existed.
+trying to deploy pkg D:\Program Files\Tidal\TIDAL\Scheduler\master\services\oracleapps.pkg with guid id {DB7FB8C2-96AF-4790-9512-AFC8ECFE784D}
+pkgName oracleapps.pkg existed.
+trying to deploy pkg D:\Program Files\Tidal\TIDAL\Scheduler\master\services\horizonservice.pkg with guid id {84E41389-A7FA-4834-9A63-3808C7B7D799}
+pkgName horizonservice.pkg existed.
+trying to deploy pkg D:\Program Files\Tidal\TIDAL\Scheduler\master\services\mssqlservice.pkg with guid id {CAFA6E81-E29F-4263-8E80-4928FFF416A2}
+pkgName mssqlservice.pkg existed.
+trying to deploy pkg D:\Program Files\Tidal\TIDAL\Scheduler\master\services\taservice.pkg with guid id {A2277702-9011-49e9-991D-F2E7E7055C0E}
+pkgName taservice.pkg existed.
+trying to deploy pkg D:\Program Files\Tidal\TIDAL\Scheduler\master\services\webservice.pkg with guid id {2C290052-71BA-47BC-85BB-D65E06459001}
+pkgName webservice.pkg existed.
+Retrieved a LogFile called 'RegularFile'
+07/23 09:10:51: (mem=2220244960/3282894848) Adding servlet com.tidalsoft.scheduler.html.MasterStatusServlet@6418fbf4 at path /
+07/23 09:10:51: (mem=2219663632/3282894848) Adding servlet com.tidalsoft.scheduler.html.DataBrowserServlet@2d66b288 at path /data
+Retrieved a LogFile called 'RegularFile'
