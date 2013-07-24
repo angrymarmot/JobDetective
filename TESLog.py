@@ -50,7 +50,7 @@ class TESLog(object):
         if not self.clientLogs:
             print "Warning!  No client logs found.  Only master logs will be captured."
             return (self.masterLogs,)
-        return (self.masterLogs, self.clientLogs)
+        return (self.masterLogs, self.clientLogs)  # Not sure this is necessary as we can just query the self-values
 
     def getJobEvents(self, jobID):
         """
@@ -59,7 +59,8 @@ class TESLog(object):
         self.jobID = jobID
         self.parsedLine = []
         self.jobIDMatch = re.compile('JobRun:\s{1}' + self.jobID + '\s{1}')
-        #re.split('(^[0-1][0-9]/[1-3][0-9]\s{1})([0-2][0-9]:[0-5][0-9]:[0-5][0-9]).+(\(mem=\d+/\d+\))', l)
+        self.jobIDMatchClient = re.compile('\s{1}' + self.jobID + '\s{1}')
+        #re.split('(^[0-1][0-9]/[1-3][0-9]\s{1})([0-2][0-9]:[0-5][0-9]:[0-5][0-9]).+(\(mem=\d+/\d+\))')
         self.parsedFilename = self.masterPath+ "\\" + self.jobID + "-parsed.txt"  # Will need to control how this is implemented later
         with open(self.parsedFilename, 'w') as self.parsedFile:
             for self.l in self.masterLogs:
@@ -69,6 +70,13 @@ class TESLog(object):
                         if len(self.parsedLine) >= 4:  # Disregard any header information
                             if self.jobIDMatch.search(self.parsedLine[4]):
                                 self.parsedFile.write(self.parsedLine[1] + self.parsedLine[2] + self.parsedLine[4])
+            for self.c in self.clientLogs:
+                with open(self.agentPath + "\\" + self.c) as self.fpc:
+                    for self.linec in self.fpc:
+                        self.parsedLineC = re.split('^_(?P<year>\d{4})(?P<monthday>\d{4})(?P<time>\s\d{2}:\d{2}:\d{2})(?P<sysdata> <.+>)(?P<entry> .+)', self.linec)
+                        if self.jobIDMatchClient.search(self.parsedLineC[3]):
+                            print self.parsedLineC # Not working
+
 
 
 mLog = r'C:\Pythontesting\master'
@@ -78,6 +86,6 @@ result = l.getLogs('20130723', '20130724')
 print l.agentPath
 print l.masterPath
 print l.version
-l.getJobEvents('53101874')
+l.getJobEvents('53108359')
 #print result
 
