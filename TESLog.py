@@ -13,6 +13,8 @@ class TESLog(object):
             self.agentPath = r'\\' + agentPath + r'srv02.thecreek.com\c$\Program Files\TIDAL\Agent\TIDAL_AGENT_1\logs\''
         else:
             self.agentPath = agentPath
+        print "Master Path: ", self.masterPath
+        print "Agent Path: ", self.agentPath
         if not os.path.isdir(self.agentPath):
             print "Path", self.agentPath, "does not exist or cannot be accessed presently."
             exit(1)
@@ -46,7 +48,7 @@ class TESLog(object):
             print "Aborting with exit code 1..."
             exit(1)
         if not self.clientLogs:
-            print "Warning!  No client logs found."
+            print "Warning!  No client logs found.  Only master logs will be captured."
             return (self.masterLogs,)
         return (self.masterLogs, self.clientLogs)
 
@@ -54,16 +56,28 @@ class TESLog(object):
         """
         Searches through self.files to extract each event for the specified jobID.
         """
-        pass
+        self.jobID = jobID
+        self.parsedLine = []
+        self.jobIDMatch = re.compile('JobRun:\s{1}' + self.jobID + '\s{1}')
+        #re.split('(^[0-1][0-9]/[1-3][0-9]\s{1})([0-2][0-9]:[0-5][0-9]:[0-5][0-9]).+(\(mem=\d+/\d+\))', l)
+        self.parsedFilename = self.masterPath+ "\\" + self.jobID + "-parsed.txt"  # Will need to control how this is implemented later
+        with open(self.parsedFilename, 'w') as self.parsedFile:
+            for self.l in self.masterLogs:
+                with open(self.masterPath + "\\" + self.l) as self.fp:
+                    for self.line in self.fp:
+                        self.parsedLine = re.split('(^[0-1][0-9]/[1-3][0-9]\s{1})([0-2][0-9]:[0-5][0-9]:[0-5][0-9]).+(\(mem=\d+/\d+\))', self.line)
+                        if len(self.parsedLine) >= 4:  # Disregard any header information
+                            if self.jobIDMatch.search(self.parsedLine[4]):
+                                self.parsedFile.write(self.parsedLine[1] + self.parsedLine[2] + self.parsedLine[4])
 
 
-
-mLog = r'X:\Dropbox\Development\JobDetective\Logs\master'
-aLog = r'X:\Dropbox\Development\JobDetective\Logs'
+mLog = r'C:\Pythontesting\master'
+aLog = r'C:\Pythontesting'
 l = TESLog('Local', '5.3.1', mLog, aLog)
 result = l.getLogs('20130723', '20130724')
 print l.agentPath
 print l.masterPath
 print l.version
-print result
+l.getJobEvents('53101874')
+#print result
 
