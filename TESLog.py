@@ -16,11 +16,12 @@ class TESLog(object):
             self.agentPath = agentPath
         self.startDate = startDate
         self.endDate = endDate
-        if not os.path.exists(agentPath):
+        os.path.normpath(agentPath)
+        if not os.path.isdir(self.agentPath):
             print "Path", self.agentPath, "does not exist or cannot be accessed presently."
             exit(1)
-l = TESLog('Retail', '5.3.1')
-l.getLogs('80312', 2013723, 2013723)
+
+l = TESLog('Local', '5.3.1')
+l.getLogs(r'X:\Dropbox\Development\JobDetective\Logs', 20130723, 20130723)
 print l.agentPath
-print l.splitPath
 
