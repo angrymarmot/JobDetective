@@ -58,6 +58,7 @@ class TESLog(object):
         """
         self.jobID = jobID
         self.parsedLine = []
+        self.unsortedParsedData = []
         self.jobIDMatch = re.compile('JobRun:\s{1}' + self.jobID + '\s{1}')
         self.jobIDMatchClient = re.compile('\s{1}' + self.jobID + '\s{1}')
         #re.split('(^[0-1][0-9]/[1-3][0-9]\s{1})([0-2][0-9]:[0-5][0-9]:[0-5][0-9]).+(\(mem=\d+/\d+\))')
@@ -69,13 +70,18 @@ class TESLog(object):
                         self.parsedLine = re.split('(^[0-1][0-9]/[1-3][0-9]\s{1})([0-2][0-9]:[0-5][0-9]:[0-5][0-9]).+(\(mem=\d+/\d+\))', self.line)
                         if len(self.parsedLine) >= 4:  # Disregard any header information
                             if self.jobIDMatch.search(self.parsedLine[4]):
-                                self.parsedFile.write(self.parsedLine[1] + self.parsedLine[2] + self.parsedLine[4])
+                                #self.parsedFile.write(self.parsedLine[1] + self.parsedLine[2] + self.parsedLine[4])
+                                self.unsortedParsedData.append(self.parsedLine[1] + self.parsedLine[2] + "[MASTER]" + self.parsedLine[4])
             for self.c in self.clientLogs:
                 with open(self.agentPath + "\\" + self.c) as self.fpc:
                     for self.linec in self.fpc:
                         self.parsedLineC = re.split('^_(?P<year>\d{4})(?P<monthday>\d{4})(?P<time>\s\d{2}:\d{2}:\d{2})(?P<sysdata> <.+>)(?P<entry> .+)', self.linec)
-                        if self.jobIDMatchClient.search(self.parsedLineC[3]):
-                            print self.parsedLineC # Not working
+                        if self.jobIDMatchClient.search(self.parsedLineC[5]):
+                            self.parsedLineC[2] = self.parsedLineC[2][:2] + '/' + self.parsedLineC[2][2:]  # Make the date look the same as in the master log
+                            #self.parsedFile.write(self.parsedLineC[2] + self.parsedLineC[3] + self.parsedLineC[5] + "\n")
+                            self.unsortedParsedData.append(self.parsedLineC[2] + self.parsedLineC[3] + "[CLIENT]" + self.parsedLineC[5] + "\n")
+            for self.unsortedLine in self.unsortedParsedData:
+                self.parsedFile.write(self.unsortedLine)
 
 
 
