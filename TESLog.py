@@ -71,7 +71,7 @@ class TESLog(object):
                         if len(self.parsedLine) >= 4:  # Disregard any header information
                             if self.jobIDMatch.search(self.parsedLine[4]):
                                 #self.parsedFile.write(self.parsedLine[1] + self.parsedLine[2] + self.parsedLine[4])
-                                self.unsortedParsedData.append(self.parsedLine[1] + self.parsedLine[2] + "[MASTER]" + self.parsedLine[4])
+                                self.unsortedParsedData.append(self.parsedLine[1] + self.parsedLine[2] + " [MASTER]" + self.parsedLine[4])
             for self.c in self.clientLogs:
                 with open(self.agentPath + "\\" + self.c) as self.fpc:
                     for self.linec in self.fpc:
@@ -79,9 +79,10 @@ class TESLog(object):
                         if self.jobIDMatchClient.search(self.parsedLineC[5]):
                             self.parsedLineC[2] = self.parsedLineC[2][:2] + '/' + self.parsedLineC[2][2:]  # Make the date look the same as in the master log
                             #self.parsedFile.write(self.parsedLineC[2] + self.parsedLineC[3] + self.parsedLineC[5] + "\n")
-                            self.unsortedParsedData.append(self.parsedLineC[2] + self.parsedLineC[3] + "[CLIENT]" + self.parsedLineC[5] + "\n")
-            for self.unsortedLine in self.unsortedParsedData:
-                self.parsedFile.write(self.unsortedLine)
+                            self.unsortedParsedData.append(self.parsedLineC[2] + self.parsedLineC[3] + " [CLIENT]" + self.parsedLineC[5] + "\n")
+            self.sortedParsedData = sorted(self.unsortedParsedData) # Not sure if this sort method will work every time.  Need testing.
+            for self.sortedLine in self.sortedParsedData:
+                self.parsedFile.write(self.sortedLine)
 
 
 
@@ -92,6 +93,6 @@ result = l.getLogs('20130723', '20130724')
 print l.agentPath
 print l.masterPath
 print l.version
-l.getJobEvents('53108359')
+l.getJobEvents('53097894')
 #print result
 
