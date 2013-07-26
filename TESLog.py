@@ -1,7 +1,7 @@
 __author__ = 'bencha'
 import os
 import re
-
+import argparse
 
 class TESLog(object):
     def __init__(self, agentType, version, masterPath, agentPath):
@@ -70,7 +70,6 @@ class TESLog(object):
                         self.parsedLine = re.split('(^[0-1][0-9]/[1-3][0-9]\s{1})([0-2][0-9]:[0-5][0-9]:[0-5][0-9]).+(\(mem=\d+/\d+\))', self.line)
                         if len(self.parsedLine) >= 4:  # Disregard any header information
                             if self.jobIDMatch.search(self.parsedLine[4]):
-                                #self.parsedFile.write(self.parsedLine[1] + self.parsedLine[2] + self.parsedLine[4])
                                 self.unsortedParsedData.append(self.parsedLine[1] + self.parsedLine[2] + " [MASTER]" + self.parsedLine[4])
             for self.c in self.clientLogs:
                 with open(self.agentPath + "\\" + self.c) as self.fpc:
@@ -78,13 +77,13 @@ class TESLog(object):
                         self.parsedLineC = re.split('^_(?P<year>\d{4})(?P<monthday>\d{4})(?P<time>\s\d{2}:\d{2}:\d{2})(?P<sysdata> <.+>)(?P<entry> .+)', self.linec)
                         if self.jobIDMatchClient.search(self.parsedLineC[5]):
                             self.parsedLineC[2] = self.parsedLineC[2][:2] + '/' + self.parsedLineC[2][2:]  # Make the date look the same as in the master log
-                            #self.parsedFile.write(self.parsedLineC[2] + self.parsedLineC[3] + self.parsedLineC[5] + "\n")
                             self.unsortedParsedData.append(self.parsedLineC[2] + self.parsedLineC[3] + " [CLIENT]" + self.parsedLineC[5] + "\n")
             self.sortedParsedData = sorted(self.unsortedParsedData) # Not sure if this sort method will work every time.  Need testing.
             for self.sortedLine in self.sortedParsedData:
                 self.parsedFile.write(self.sortedLine)
 
-
+# todo - Need to implement an interface to determine the agent to get the agent logs from (use argparse)
+# todo - Minimize the number of arguments to pass to the program
 
 mLog = r'C:\Pythontesting\master'
 aLog = r'C:\Pythontesting'
@@ -94,5 +93,5 @@ print l.agentPath
 print l.masterPath
 print l.version
 l.getJobEvents('53097894')
-#print result
+
 
